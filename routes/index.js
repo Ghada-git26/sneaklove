@@ -135,7 +135,7 @@ router.get("/prod-delete/:id", (req, res) => {
     Sneaker.findByIdAndDelete(req.params.id)
         .then(() => {
 
-            res.redirect("/sneakers/collection");
+            res.redirect("/prod-manage");
         })
         .catch((error) => {
             console.log(error);
