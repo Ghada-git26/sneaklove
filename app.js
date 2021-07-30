@@ -1,6 +1,7 @@
 require("dotenv").config();
 require("./config/mongodb"); // database initial setup
 require("./helpers/hbs"); // utils for hbs templates
+// require("./seeds/sneaker.seed")
 
 // base dependencies
 const express = require("express");
