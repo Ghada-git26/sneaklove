@@ -2,6 +2,7 @@ const express = require("express");
 const { findById } = require("../models/Sneaker");
 const router = express.Router();
 const Sneaker = require("../models/Sneaker");
+const protectRoute = require("../middlewares/protectPrivateRoute");
 
 // return console.log(`\n\n
 // -----------------------------
@@ -63,24 +64,6 @@ router.get("/sneakers/women", (req, res) => {
         });
 });
 
-router.get("/prod-add", (req, res) => {
-    res.render("products_add.hbs");
-});
-
-
-router.post("/prod-add", (req, res) => {
-    Sneaker.create(req.body)
-        .then((dbRes) => {
-            console.log(dbRes);
-            res.redirect("/sneakers/collection")
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-});
-
-
-
 router.get("/one-product/:id", (req, res) => {
     Sneaker.findById(req.params.id)
         .then((dbRes) => {
@@ -93,7 +76,28 @@ router.get("/one-product/:id", (req, res) => {
         });
 });
 
-router.get("/prod-manage", (req, res) => {
+
+router.get("/prod-add", protectRoute, function (req, res, next) {
+    res.render("products_add.hbs");
+});
+
+
+router.post("/prod-add", protectRoute, (req, res, next) => {
+    Sneaker.create(req.body)
+        .then((dbRes) => {
+            console.log(dbRes);
+            res.redirect("/sneakers/collection")
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+});
+
+
+
+
+
+router.get("/prod-manage", protectRoute, (req, res, next) => {
     Sneaker.find()
         .then((dbRes) => {
             res.render("products_manage.hbs", {
@@ -105,7 +109,7 @@ router.get("/prod-manage", (req, res) => {
         });
 });
 
-router.get("/prod-edit/:id", (req, res) => {
+router.get("/prod-edit/:id", protectRoute, (req, res, next) => {
     Sneaker.findById(req.params.id)
         .then((dbRes) => {
 
@@ -119,7 +123,7 @@ router.get("/prod-edit/:id", (req, res) => {
         });
 });
 
-router.post("/prod-edit/:id", (req, res) => {
+router.post("/prod-edit/:id", protectRoute, (req, res, next) => {
     Sneaker.findByIdAndUpdate(req.params.id, req.body, { new: true })
         .then((dbRes) => {
             console.log(dbRes);
@@ -131,7 +135,7 @@ router.post("/prod-edit/:id", (req, res) => {
 });
 
 
-router.get("/prod-delete/:id", (req, res) => {
+router.get("/prod-delete/:id", protectRoute, (req, res, next) => {
     Sneaker.findByIdAndDelete(req.params.id)
         .then(() => {
 
@@ -141,22 +145,6 @@ router.get("/prod-delete/:id", (req, res) => {
             console.log(error);
         });
 });
-
-// router.get("/sneakers/:cat", (req, res) => {
-//   res.send("bar");
-// });
-
-// router.get("/one-product/:id", (req, res) => {
-//   res.send("baz");
-// });
-
-// router.get("/signup", (req, res) => {
-//   res.send("sneak");
-// });
-
-// router.get("/signin", (req, res) => {
-//   res.send("love");
-// });
 
 
 module.exports = router;

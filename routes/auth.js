@@ -80,6 +80,14 @@ router.post("/signin", async (req, res, next) => {
     catch (error) {}
 })
 
-
+router.get("/logout", (req, res, next) => {
+    req.session.destroy((error) => {
+      if (error) {
+        next(error);
+      } else {
+        res.redirect("/signin");
+      }
+    });
+  });
 
 module.exports = router;
