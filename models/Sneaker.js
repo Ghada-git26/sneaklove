@@ -11,6 +11,7 @@ const sneakerSchema = new Schema({
         type: String,
         enum: ["men", "women", "kids"],
     },
+    image: String,
     id_tags: [{
         type: Schema.Types.ObjectId,
         ref: "Tag"
